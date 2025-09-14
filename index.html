@@ -3,332 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>네이버 품앗이 링크 공유</title>
+    <title>네이버 품앗이 센터 V2</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
         .container { max-width: 800px; }
         .header { padding: 2rem 0; text-align: center; }
         .header h1 { font-weight: 700; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+        .auth-container { max-width: 400px; margin: auto; }
+        .hidden { display: none; }
+        .spinner-border { width: 1.5rem; height: 1.5rem; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
         .calendar-day, .calendar-day-name { text-align: center; padding: 0.5rem; }
         .calendar-day-name { font-weight: bold; color: #6c757d; }
         .calendar-day { background-color: #fff; border: 1px solid #e9ecef; border-radius: 0.25rem; }
         .calendar-day.other-month { color: #ced4da; }
-        .calendar-day.today { background-color: #0d6efd; color: white; font-weight: bold; }
-        .calendar-day.active-day { cursor: pointer; border: 2px solid #0d6efd; }
-        .calendar-day.active-day:hover { background-color: #e6f0ff; }
-        .download-section { text-align: center; padding: 2rem 0; }
-        .login-container { max-width: 400px; margin: auto; }
-        .hidden { display: none; }
-        .spinner-border { width: 1.5rem; height: 1.5rem; }
+        .calendar-day.today { background-color: #198754; color: white; font-weight: bold; }
+        .calendar-day.active-day { cursor: pointer; border: 2px solid #198754; }
+        .calendar-day.active-day:hover { background-color: #e9f5ee; }
+        .nav-tabs .nav-link.active { font-weight: bold; }
+        #completionBtn:disabled { cursor: not-allowed; }
+        .penalty-1 { color: #ffc107; }
+        .penalty-2 { color: #fd7e14; }
+        .penalty-3 { color: #dc3545; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <header class="header">
-            <h1>네이버 품앗이 센터</h1>
-            <p class="lead">오늘의 품앗이 링크를 등록하고 공유하세요.</p>
+            <h1>네이버 품앗이 센터 V2</h1>
         </header>
 
-        <div id="loginView">
-            <div class="card login-container">
+        <div id="authView">
+            <div class="card auth-container">
                 <div class="card-body p-4">
-                    <h5 class="card-title text-center mb-4">시작하기</h5>
-                    <div class="mb-3">
-                        <label for="userIdInput" class="form-label">아이디는 블로그 아이디를 입력해주세요</label>
-                        <input type="text" class="form-control" id="userIdInput" placeholder="예: naver_blog_id">
+                    <ul class="nav nav-tabs nav-fill mb-4" id="authTab" role="tablist">
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">로그인</button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">회원가입</button>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="login" role="tabpanel">
+                        <h5 class="card-title text-center mb-3">로그인</h5>
+                        <div class="mb-3">
+                            <label for="loginIdInput" class="form-label">블로그 아이디</label>
+                            <input type="text" class="form-control" id="loginIdInput">
+                        </div>
+                        <div class="d-grid">
+                            <button id="loginButton" class="btn btn-primary">로그인</button>
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="register" role="tabpanel">
+                        <h5 class="card-title text-center mb-3">회원가입</h5>
+                        <div class="mb-3">
+                            <label for="registerIdInput" class="form-label">블로그 아이디</label>
+                            <input type="text" class="form-control" id="registerIdInput">
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerLinkInput" class="form-label">블로그 링크 (모바일)</label>
+                            <input type="url" class="form-control" id="registerLinkInput" placeholder="https://m.blog.naver.com/아이디">
+                        </div>
+                        <div class="d-grid">
+                            <button id="registerButton" class="btn btn-success">가입하기</button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="d-grid">
-                        <button id="loginButton" class="btn btn-primary">저장하고 시작하기</button>
-                    </div>
+                    <div id="authAlert" class="alert mt-3 hidden" role="alert"></div>
                 </div>
             </div>
         </div>
 
         <main id="mainView" class="hidden">
             <div class="card mb-4">
-                <div class="card-body">
-                    <p class="mb-0"><strong><span id="welcomeMessage"></span></strong>님, 환영합니다.
-                       <button id="logoutButton" class="btn btn-sm btn-outline-secondary float-end">로그아웃</button>
-                    </p>
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <p class="mb-0"><strong><span id="welcomeMessage"></span></strong>님, 환영합니다.</p>
+                    <button id="logoutButton" class="btn btn-sm btn-outline-secondary">로그아웃</button>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="calendar-header">
-                        <button id="prevMonth" class="btn btn-outline-secondary">&lt;</button>
-                        <h3 id="currentMonthYear"></h3>
-                        <button id="nextMonth" class="btn btn-outline-secondary">&gt;</button>
-                    </div>
-                    <div class="calendar-grid" id="dayNames">
-                        <div class="calendar-day-name">일</div>
-                        <div class="calendar-day-name">월</div>
-                        <div class="calendar-day-name">화</div>
-                        <div class="calendar-day-name">수</div>
-                        <div class="calendar-day-name">목</div>
-                        <div class="calendar-day-name">금</div>
-                        <div class="calendar-day-name">토</div>
-                    </div>
-                    <div class="calendar-grid" id="calendarBody"></div>
-                </div>
-            </div>
+            <ul class="nav nav-tabs nav-fill mb-3" id="mainAppTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="submission-tab" data-bs-toggle="tab" data-bs-target="#submission" type="button" role="tab">품앗이 링크 저장</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="report-tab" data-bs-toggle="tab" data-bs-target="#report" type="button" role="tab">품앗이 완료 및 보고서</button>
+              </li>
+            </ul>
 
-            <div class="download-section mt-3">
-                <div id="downloadContainer" class="hidden">
-                    <h5>오늘의 품앗이 링크</h5>
-                    <p class="text-muted">매일 저녁 8시 이후에 생성됩니다.</p>
-                    <a id="downloadLink" href="#" class="btn btn-success btn-lg" download>엑셀 파일 다운로드</a>
+            <div class="tab-content">
+              <div class="tab-pane active" id="submission" role="tabpanel">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center p-2">
+                            <button id="prevMonth" class="btn btn-outline-secondary">&lt;</button>
+                            <h4 id="currentMonthYear" class="mb-0"></h4>
+                            <button id="nextMonth" class="btn btn-outline-secondary">&gt;</button>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-day-name">일</div><div class="calendar-day-name">월</div><div class="calendar-day-name">화</div><div class="calendar-day-name">수</div><div class="calendar-day-name">목</div><div class="calendar-day-name">금</div><div class="calendar-day-name">토</div>
+                        </div>
+                        <div class="calendar-grid" id="calendarBody"></div>
+                    </div>
                 </div>
-                 <div id="noDownloadContainer">
-                    <p class="text-muted">아직 다운로드 링크가 생성되지 않았습니다. (매일 20:00 생성)</p>
-                </div>
+              </div>
+
+              <div class="tab-pane" id="report" role="tabpanel">
+                 <div class="card mb-4">
+                    <div class="card-header"><h4>금일 품앗이 완료 보고</h4></div>
+                    <div class="card-body text-center">
+                        <p id="completionTimer" class="text-muted">완료 보고 활성화까지 남은 시간: 00:00:00</p>
+                        <button id="completionBtn" class="btn btn-success btn-lg" disabled>품앗이 완료 확인</button>
+                    </div>
+                 </div>
+
+                 <div class="card">
+                    <div class="card-header"><h4>어제 품앗이 완료 보고서</h4></div>
+                    <div id="reportContent" class="card-body">
+                        <p class="text-center">보고서를 불러오는 중입니다...</p>
+                    </div>
+                 </div>
+              </div>
             </div>
         </main>
-    </div>
+        
+        <div id="adminView" class="hidden">
+            <h2 class="text-center">관리자 모드</h2>
+            <div id="adminAlert" class="alert mt-3 hidden" role="alert"></div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>아이디</th>
+                            <th>블로그 링크</th>
+                            <th>가입일</th>
+                            <th>상태</th>
+                            <th>패널티</th>
+                            <th>잠금 종료일</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUserTable"></tbody>
+                </table>
+            </div>
+        </div>
 
-    <div class="modal fade" id="linkModal" tabindex="-1">
+    </div> <div class="modal fade" id="linkModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header"><h5 class="modal-title" id="modalTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
+                    <div class="alert alert-info small">
+                        네이버 <b>모바일 버전(m.blog.naver.com)</b> 링크만 가능합니다.<br>
+                        (PC버전, <b>클립(Clip)</b>, 단축URL, 타 블로그 불가)
+                    </div>
                     <p><strong>아이디:</strong> <span id="modalUserId"></span></p>
-                    <div class="mb-3">
-                        <label class="form-label">링크 1 (필수)</label>
-                        <input type="url" class="form-control" id="linkInput1" placeholder="https://blog.naver.com/...">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">링크 2</label>
-                        <input type="url" class="form-control" id="linkInput2" placeholder="https://blog.naver.com/...">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">링크 3</label>
-                        <input type="url" class="form-control" id="linkInput3" placeholder="https://blog.naver.com/...">
-                    </div>
-                    <div id="modalAlert" class="alert mt-3 hidden" role="alert"></div>
+                    <div class="mb-3"><label class="form-label">링크 1 (필수)</label><input type="url" class="form-control" id="linkInput1" placeholder="https://m.blog.naver.com/..."></div>
+                    <div class="mb-3"><label class="form-label">링크 2</label><input type="url" class="form-control" id="linkInput2" placeholder="https://m.blog.naver.com/..."></div>
+                    <div class="mb-3"><label class="form-label">링크 3</label><input type="url" class="form-control" id="linkInput3" placeholder="https://m.blog.naver.com/..."></div>
+                    <div id="linkModalAlert" class="alert mt-3 hidden" role="alert"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" id="saveLinksButton">
-                        <span class="spinner-border spinner-border-sm hidden" role="status" aria-hidden="true"></span>
-                        저장하기
-                    </button>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" class="btn btn-primary" id="saveLinksButton">저장하기</button></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="completionModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title">품앗이 완료 확인</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body">
+                    <p>금일 모든 품앗이 완료 되었음을 보고 합니다.</p>
+                    <p>좋아요, 댓글, 체류 완료 되었습니다.</p>
+                    <p class="text-muted small">아래 확인버튼 누르시면 금일 품앗이는 모두 완료됩니다.</p>
+                    <div id="completionModalAlert" class="alert mt-3 hidden" role="alert"></div>
                 </div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="confirmCompletionButton">확인</button></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="adminEditModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title" id="adminEditTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body">
+                    <input type="hidden" id="adminEditUserId">
+                    <div class="mb-3"><label class="form-label">상태 (ACTIVE, BLOCKED)</label><input type="text" class="form-control" id="adminEditStatus"></div>
+                    <div class="mb-3"><label class="form-label">패널티 횟수</label><input type="number" class="form-control" id="adminEditPenaltyCount"></div>
+                    <div class="mb-3"><label class="form-label">잠금 종료일 (yyyy-mm-dd 또는 비우기)</label><input type="text" class="form-control" id="adminEditLockoutDate"></div>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="adminSaveChangesButton">변경사항 저장</button></div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-    // ##############################################################
-    // ##### 3단계: 아래 'SCRIPT_URL'에 본인의 웹 앱 URL을 붙여넣으세요 #####
-    // ##############################################################
+    // ######################################################################
+    // ##### 5단계: 여기에 새로 배포한 웹 앱 URL을 붙여넣으세요 #####
+    // ######################################################################
+    
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzsjtEHfQn6THdxmB3u0Z2rNokZYaSbX8T9z8YuGOcmpW-Cy-ELpCZVg5dwKFr5OW85/exec';
+    const ADMIN_PASSWORD_FRONT = "7702";
 
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6qYfgILK9mvcUCnaIKKgImpjtT6WSN5TKyyIlMRekqcFgVG4uytExqRVS3-iDtr8c/exec';
-
-    // ##############################################################
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const loginView = document.getElementById('loginView');
-        const mainView = document.getElementById('mainView');
-        const loginButton = document.getElementById('loginButton');
-        const userIdInput = document.getElementById('userIdInput');
-        const logoutButton = document.getElementById('logoutButton');
-        const welcomeMessage = document.getElementById('welcomeMessage');
-
-        const calendarBody = document.getElementById('calendarBody');
-        const currentMonthYear = document.getElementById('currentMonthYear');
-        const prevMonth = document.getElementById('prevMonth');
-        const nextMonth = document.getElementById('nextMonth');
-
-        const linkModal = new bootstrap.Modal(document.getElementById('linkModal'));
-        const modalTitle = document.getElementById('modalTitle');
-        const modalUserId = document.getElementById('modalUserId');
-        const saveLinksButton = document.getElementById('saveLinksButton');
-        const linkInputs = [document.getElementById('linkInput1'), document.getElementById('linkInput2'), document.getElementById('linkInput3')];
-        const modalAlert = document.getElementById('modalAlert');
-
-        const downloadContainer = document.getElementById('downloadContainer');
-        const noDownloadContainer = document.getElementById('noDownloadContainer');
-        const downloadLink = document.getElementById('downloadLink');
-
-        let currentDate = new Date();
-        let userId = localStorage.getItem('pumasi_user_id');
-        let selectedDate = '';
-
-        function checkLogin() {
-            userId = localStorage.getItem('pumasi_user_id');
-            if (userId) {
-                loginView.classList.add('hidden');
-                mainView.classList.remove('hidden');
-                welcomeMessage.textContent = userId;
-                renderCalendar(currentDate);
-                checkForDownloadLink();
-            } else {
-                loginView.classList.remove('hidden');
-                mainView.classList.add('hidden');
-            }
-        }
-
-        loginButton.addEventListener('click', () => {
-            const inputId = userIdInput.value.trim();
-            if (inputId) {
-                localStorage.setItem('pumasi_user_id', inputId);
-                checkLogin();
-            } else {
-                alert('아이디를 입력해주세요.');
-            }
-        });
-
-        logoutButton.addEventListener('click', () => {
-            if (confirm('로그아웃 하시겠습니까?')) {
-                localStorage.removeItem('pumasi_user_id');
-                checkLogin();
-            }
-        });
-
-        function renderCalendar(date) {
-            calendarBody.innerHTML = '';
-            const year = date.getFullYear();
-            const month = date.getMonth();
-
-            currentMonthYear.textContent = `${year}년 ${month + 1}월`;
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const lastDate = new Date(year, month + 1, 0).getDate();
-
-            for (let i = 0; i < firstDay; i++) {
-                calendarBody.innerHTML += `<div class="calendar-day other-month"></div>`;
-            }
-
-            const today = new Date();
-            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-            for (let i = 1; i <= lastDate; i++) {
-                const dayDiv = document.createElement('div');
-                dayDiv.classList.add('calendar-day');
-                dayDiv.textContent = i;
-
-                const currentDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-
-                if (currentDateStr === todayStr) {
-                    dayDiv.classList.add('today', 'active-day');
-                    dayDiv.dataset.date = currentDateStr;
-                }
-
-                calendarBody.appendChild(dayDiv);
-            }
-        }
-
-        calendarBody.addEventListener('click', (e) => {
-            if (e.target.classList.contains('active-day')) {
-                selectedDate = e.target.dataset.date;
-                modalTitle.textContent = `${selectedDate} 링크 등록`;
-                modalUserId.textContent = userId;
-                linkInputs.forEach(input => input.value = '');
-                hideModalAlert();
-                linkModal.show();
-            }
-        });
-
-        prevMonth.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar(currentDate);
-        });
-
-        nextMonth.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar(currentDate);
-        });
-
-        saveLinksButton.addEventListener('click', async () => {
-            const links = linkInputs.map(input => input.value.trim()).filter(link => link);
-            if (links.length === 0) {
-                showModalAlert('링크를 하나 이상 입력해주세요.', 'danger');
-                return;
-            }
-
-            toggleSpinner(true);
-
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: 'saveLinks',
-                        userId: userId,
-                        date: selectedDate,
-                        links: links
-                    })
-                });
-
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    showModalAlert('링크가 성공적으로 저장되었습니다.', 'success');
-                    setTimeout(() => linkModal.hide(), 1500);
-                } else {
-                    showModalAlert(result.message || '저장에 실패했습니다.', 'danger');
-                }
-            } catch (error) {
-                showModalAlert('오류가 발생했습니다. 다시 시도해주세요.', 'danger');
-            } finally {
-                toggleSpinner(false);
-            }
-        });
-
-        async function checkForDownloadLink() {
-            try {
-                const response = await fetch(`${SCRIPT_URL}?action=getDownloadLink`, {
-                    method: 'GET',
-                    mode: 'cors'
-                });
-                const result = await response.json();
-                if (result.status === 'success' && result.data.downloadLink) {
-                    downloadLink.href = result.data.downloadLink;
-                    downloadContainer.classList.remove('hidden');
-                    noDownloadContainer.classList.add('hidden');
-                } else {
-                    downloadContainer.classList.add('hidden');
-                    noDownloadContainer.classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error("Error fetching download link:", error);
-            }
-        }
-
-        function showModalAlert(message, type) {
-            modalAlert.textContent = message;
-            modalAlert.className = `alert alert-${type}`;
-        }
-
-        function hideModalAlert() {
-            modalAlert.className = 'alert hidden';
-        }
-
-        function toggleSpinner(show) {
-            const spinner = saveLinksButton.querySelector('.spinner-border');
-            if (show) {
-                saveLinksButton.disabled = true;
-                spinner.classList.remove('hidden');
-            } else {
-                saveLinksButton.disabled = false;
-                spinner.classList.add('hidden');
-            }
-        }
-
-        // Initial Load
-        checkLogin();
-        setInterval(checkForDownloadLink, 60000); // Check for download link every minute
-    });
+    // ... (JavaScript application code will go here)
     </script>
 </body>
 </html>
