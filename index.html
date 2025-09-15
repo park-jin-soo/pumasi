@@ -23,7 +23,7 @@
         .calendar-day.saturday .day-number { color: #0d6efd; }
         .calendar-day .link-count { font-size: 0.75rem; color: #198754; font-weight: bold; margin-top: auto; align-self: flex-end; }
         .calendar-day.other-month { background-color: #f8f9fa; color: #ced4da; }
-        .calendar-day.today { border: 2px solid #198754; }
+        .calendar-day.today { border: 2px solid #198754; position: relative; }
         .calendar-day.active-day { cursor: pointer; border-color: #0d6efd; box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25); }
         .calendar-day.active-day:hover { background-color: #e9f5ee; }
         .nav-tabs .nav-link.active { font-weight: bold; }
@@ -31,6 +31,29 @@
         .penalty-1 { color: #ffc107; }
         .penalty-2 { color: #fd7e14; }
         .penalty-3 { color: #dc3545; font-weight: bold; }
+
+        /* 오늘 날짜 강조 스타일 추가 */
+        .today-marker {
+            font-weight: bold;
+            color: #d63384;
+            text-align: center;
+            animation: pulse 1.5s infinite;
+            margin-top: 4px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .rules-box {
+            background-color: #eef7ff;
+            border-left: 5px solid #0d6efd;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -67,17 +90,40 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="submission" role="tabpanel">
-                <div class="card"><div class="card-body"><div class="calendar-header"><button id="prevMonth" class="btn btn-outline-secondary">&lt;</button><div class="calendar-title"><h4 id="currentMonthYear" class="mb-0"></h4><span id="monthlyTotalCount" class="badge bg-secondary"></span></div><button id="nextMonth" class="btn btn-outline-secondary">&gt;</button></div><div class="calendar-grid"><div class="calendar-day-name sunday">일</div><div class="calendar-day-name">월</div><div class="calendar-day-name">화</div><div class="calendar-day-name">수</div><div class="calendar-day-name">목</div><div class="calendar-day-name">금</div><div class="calendar-day-name saturday">토</div></div><div class="calendar-grid" id="calendarBody"></div></div></div>
+                  <div class="rules-box">
+                      <h6 class="mb-2 fw-bold">📢 링크 저장 규칙</h6>
+                      <ul>
+                          <li><strong>오늘 날짜</strong>에만 링크를 등록할 수 있습니다.</li>
+                          <li>링크는 <strong>모바일 버전(m.blog.naver.com)</strong>만 가능하며, 최대 3개까지 등록할 수 있습니다.</li>
+                          <li>PC 링크, 단축 URL, 클립(Clip) 링크는 제출이 불가합니다.</li>
+                      </ul>
+                  </div>
+                  <div class="card"><div class="card-body"><div class="calendar-header"><button id="prevMonth" class="btn btn-outline-secondary">&lt;</button><div class="calendar-title"><h4 id="currentMonthYear" class="mb-0"></h4><span id="monthlyTotalCount" class="badge bg-secondary"></span></div><button id="nextMonth" class="btn btn-outline-secondary">&gt;</button></div><div class="calendar-grid"><div class="calendar-day-name sunday">일</div><div class="calendar-day-name">월</div><div class="calendar-day-name">화</div><div class="calendar-day-name">수</div><div class="calendar-day-name">목</div><div class="calendar-day-name">금</div><div class="calendar-day-name saturday">토</div></div><div class="calendar-grid" id="calendarBody"></div></div></div>
               </div>
               <div class="tab-pane" id="completion" role="tabpanel">
-                 <div class="card mb-4"><div class="card-header"><h4>금일 품앗이 완료 보고</h4></div><div class="card-body text-center"><p id="completionTimer" class="text-muted"></p><button id="completionBtn" class="btn btn-success btn-lg" disabled>품앗이 완료 확인</button></div></div>
+                   <div class="rules-box">
+                      <h6 class="mb-2 fw-bold">📢 완료 확인 규칙</h6>
+                      <ul>
+                          <li>품앗이 완료 보고는 <strong>당일 저녁 6시 30분 ~ 밤 11시 30분</strong> 사이에만 가능합니다.</li>
+                          <li>오늘 제출된 모든 링크에 대한 품앗이(좋아요, 댓글, 체류)를 완료한 후 버튼을 눌러주세요.</li>
+                          <li>시간 내에 완료 확인을 하지 않을 경우 미완료로 처리되어 패널티가 부과됩니다.</li>
+                      </ul>
+                  </div>
+                  <div class="card mb-4"><div class="card-header"><h4>금일 품앗이 완료 보고</h4></div><div class="card-body text-center"><p id="completionTimer" class="text-muted"></p><button id="completionBtn" class="btn btn-success btn-lg" disabled>품앗이 완료 확인</button></div></div>
               </div>
               <div class="tab-pane" id="downloads" role="tabpanel">
-                <div class="card mb-4">
-                    <div class="card-header"><h4>보고서 다운로드</h4></div>
-                    <div class="card-body"><div class="list-group"><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>오늘의 품앗이 링크 목록</strong><small class="d-block text-muted">매일 저녁 8시 이후 생성</small></div><a href="#" id="dailyLinksDownloadBtn" class="btn btn-primary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>어제자 활동 완료 보고서</strong><small class="d-block text-muted">매일 밤 12시 5분 이후 생성</small></div><a href="#" id="completionReportDownloadBtn" class="btn btn-secondary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div></div></div>
-                </div>
-                <div class="card"><div class="card-header"><h4>어제자 미완료 회원 목록</h4></div><div id="reportContent" class="card-body"><p class="text-center">보고서를 불러오는 중입니다...</p></div></div>
+                   <div class="rules-box">
+                      <h6 class="mb-2 fw-bold">📢 보고서 다운로드 안내</h6>
+                      <ul>
+                          <li><strong>오늘의 품앗이 링크 목록:</strong> 매일 저녁 8시 이후 생성되어, 품앗이 활동에 사용됩니다.</li>
+                          <li><strong>어제자 활동 완료 보고서:</strong> 매일 밤 12시 5분 이후 생성되며, 미완료 회원 및 패널티 현황을 확인할 수 있습니다.</li>
+                      </ul>
+                  </div>
+                  <div class="card mb-4">
+                      <div class="card-header"><h4>보고서 다운로드</h4></div>
+                      <div class="card-body"><div class="list-group"><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>오늘의 품앗이 링크 목록</strong><small class="d-block text-muted">매일 저녁 8시 이후 생성</small></div><a href="#" id="dailyLinksDownloadBtn" class="btn btn-primary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>어제자 활동 완료 보고서</strong><small class="d-block text-muted">매일 밤 12시 5분 이후 생성</small></div><a href="#" id="completionReportDownloadBtn" class="btn btn-secondary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div></div></div>
+                  </div>
+                  <div class="card"><div class="card-header"><h4>어제자 미완료 회원 목록</h4></div><div id="reportContent" class="card-body"><p class="text-center">보고서를 불러오는 중입니다...</p></div></div>
               </div>
             </div>
         </main>
@@ -259,11 +305,16 @@
                 const dayLinkCount = linkCounts[i] || 0;
                 totalLinksThisMonth += dayLinkCount;
                 let countHtml = dayLinkCount > 0 ? `<div class="link-count">총 ${dayLinkCount}개</div>` : '';
-                dayDiv.innerHTML = `<div class="day-number">${i}</div>${countHtml}`;
+                
                 const currentDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+
                 if (currentDateStr === todayStr) {
                     dayDiv.classList.add('today', 'active-day');
                     dayDiv.dataset.date = currentDateStr;
+                    // 수정된 부분: 오늘 날짜에 클릭 유도 문구 추가
+                    dayDiv.innerHTML = `<div class="day-number">${i}</div><div class="today-marker">👇 클릭!</div>${countHtml}`;
+                } else {
+                    dayDiv.innerHTML = `<div class="day-number">${i}</div>${countHtml}`;
                 }
                 calendarBody.appendChild(dayDiv);
             }
@@ -314,21 +365,29 @@
         }
         function updateCompletionButtonStatus() {
             const now = new Date();
-            const kstOffset = 9 * 60 * 60 * 1000;
-            const kstTime = new Date(now.getTime() + kstOffset);
-            const kstHours = kstTime.getUTCHours();
-            const kstMinutes = kstTime.getUTCMinutes();
-            const startTime = 18.5, endTime = 23.5;
+            // 한국 시간(UTC+9) 기준으로 계산
+            const kstNow = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+            const kstHours = kstNow.getHours();
+            const kstMinutes = kstNow.getMinutes();
+            
+            // 시작 시간: 18시 30분, 종료 시간: 23시 30분
+            const startTime = 18.5; 
+            const endTime = 23.5;
             const currentTime = kstHours + kstMinutes / 60;
+
             if (currentTime >= startTime && currentTime <= endTime) {
                 completionBtn.disabled = false;
                 completionTimer.textContent = "지금 완료 보고가 가능합니다.";
             } else {
                 completionBtn.disabled = true;
-                let nextStart = new Date(kstTime);
-                nextStart.setUTCHours(18, 30, 0, 0);
-                if (kstTime > nextStart) { nextStart.setUTCDate(nextStart.getUTCDate() + 1); }
-                const diff = nextStart - kstTime;
+                let nextStart = new Date(kstNow);
+                nextStart.setHours(18, 30, 0, 0);
+                
+                if (kstNow.getTime() > nextStart.getTime()) {
+                    nextStart.setDate(nextStart.getDate() + 1);
+                }
+
+                const diff = nextStart - kstNow;
                 const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
                 const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
                 const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
