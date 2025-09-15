@@ -31,29 +31,16 @@
         .penalty-1 { color: #ffc107; }
         .penalty-2 { color: #fd7e14; }
         .penalty-3 { color: #dc3545; font-weight: bold; }
-
-        /* 오늘 날짜 강조 스타일 추가 */
-        .today-marker {
-            font-weight: bold;
-            color: #d63384;
-            text-align: center;
-            animation: pulse 1.5s infinite;
-            margin-top: 4px;
-        }
-
+        .today-marker { font-weight: bold; color: #d63384; text-align: center; animation: pulse 1.5s infinite; margin-top: 4px; }
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.1); opacity: 0.7; }
             100% { transform: scale(1); opacity: 1; }
         }
-        
-        .rules-box {
-            background-color: #eef7ff;
-            border-left: 5px solid #0d6efd;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
+        .rules-box { background-color: #eef7ff; border-left: 5px solid #0d6efd; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .penalty-info { list-style-type: none; padding-left: 0; }
+        .penalty-info li { margin-bottom: 0.5rem; }
+        .penalty-info .badge { margin-right: 8px; }
     </style>
 </head>
 <body>
@@ -91,22 +78,23 @@
             <div class="tab-content">
               <div class="tab-pane active" id="submission" role="tabpanel">
                   <div class="rules-box">
-                      <h6 class="mb-2 fw-bold">📢 링크 저장 규칙</h6>
+                      <h6 class="mb-2 fw-bold">📢 링크 저장/삭제 규칙</h6>
                       <ul>
-                          <li><strong>오늘 날짜</strong>에만 링크를 등록할 수 있습니다.</li>
-                          <li>링크는 <strong>모바일 버전(m.blog.naver.com)</strong>만 가능하며, 최대 3개까지 등록할 수 있습니다.</li>
-                          <li>PC 링크, 단축 URL, 클립(Clip) 링크는 제출이 불가합니다.</li>
+                          <li>품앗이에 참여할 링크는 <strong>당일 17시 59분까지</strong> 등록/수정/삭제할 수 있습니다.</li>
+                          <li>급한 사정으로 품앗이가 어렵다면, 반드시 <strong>17시 59분까지 링크를 삭제</strong>해 주세요. <strong>18시 이후에는 삭제가 불가</strong>합니다.</li>
+                          <li>품앗이 활동을 모두 마친 후, <strong>당일 23시 30분까지 '품앗이 완료 확인' 탭에서 완료 보고</strong>를 해야 패널티를 받지 않습니다.</li>
                       </ul>
                   </div>
                   <div class="card"><div class="card-body"><div class="calendar-header"><button id="prevMonth" class="btn btn-outline-secondary">&lt;</button><div class="calendar-title"><h4 id="currentMonthYear" class="mb-0"></h4><span id="monthlyTotalCount" class="badge bg-secondary"></span></div><button id="nextMonth" class="btn btn-outline-secondary">&gt;</button></div><div class="calendar-grid"><div class="calendar-day-name sunday">일</div><div class="calendar-day-name">월</div><div class="calendar-day-name">화</div><div class="calendar-day-name">수</div><div class="calendar-day-name">목</div><div class="calendar-day-name">금</div><div class="calendar-day-name saturday">토</div></div><div class="calendar-grid" id="calendarBody"></div></div></div>
               </div>
               <div class="tab-pane" id="completion" role="tabpanel">
                    <div class="rules-box">
-                      <h6 class="mb-2 fw-bold">📢 완료 확인 규칙</h6>
-                      <ul>
-                          <li>품앗이 완료 보고는 <strong>당일 저녁 6시 30분 ~ 밤 11시 30분</strong> 사이에만 가능합니다.</li>
-                          <li>오늘 제출된 모든 링크에 대한 품앗이(좋아요, 댓글, 체류)를 완료한 후 버튼을 눌러주세요.</li>
-                          <li>시간 내에 완료 확인을 하지 않을 경우 미완료로 처리되어 패널티가 부과됩니다.</li>
+                      <h6 class="mb-2 fw-bold">📢 완료 확인 규칙 및 패널티 안내</h6>
+                      <p class="mb-2">품앗이 완료 보고는 <strong>당일 저녁 6시 30분 ~ 밤 11시 30분</strong> 사이에만 가능합니다.<br>시간 내 완료 보고를 하지 않을 경우 미완료로 처리되며, 아래와 같이 패널티가 부과됩니다.</p>
+                      <ul class="penalty-info">
+                          <li><span class="badge bg-warning text-dark">패널티 1회</span><strong>봉사</strong> (본인 링크 제출 불가, 다른 회원 품앗이만 진행)</li>
+                          <li><span class="badge bg-danger">패널티 2회</span><strong>7일간 사용 금지</strong></li>
+                          <li><span class="badge bg-dark">패널티 3회</span><strong>회원 자격 박탈</strong></li>
                       </ul>
                   </div>
                   <div class="card mb-4"><div class="card-header"><h4>금일 품앗이 완료 보고</h4></div><div class="card-body text-center"><p id="completionTimer" class="text-muted"></p><button id="completionBtn" class="btn btn-success btn-lg" disabled>품앗이 완료 확인</button></div></div>
@@ -133,13 +121,13 @@
             <div class="table-responsive"><table class="table table-striped"><thead><tr><th>아이디</th><th>블로그 링크</th><th>가입일</th><th>상태</th><th>패널티</th><th>잠금 종료일</th><th>관리</th></tr></thead><tbody id="adminUserTable"></tbody></table></div>
         </div>
     </div>
-    <div class="modal fade" id="linkModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="modalTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="alert alert-info small">네이버 <b>모바일 버전(m.blog.naver.com)</b> 링크만 가능합니다.<br>(PC버전, <b>클립(Clip)</b>, 단축URL, 타 블로그 불가)</div><p><strong>아이디:</strong> <span id="modalUserId"></span></p><div class="mb-3"><label class="form-label">링크 1 (필수)</label><input type="url" class="form-control" id="linkInput1" placeholder="https://m.blog.naver.com/..."></div><div class="mb-3"><label class="form-label">링크 2</label><input type="url" class="form-control" id="linkInput2" placeholder="https://m.blog.naver.com/..."></div><div class="mb-3"><label class="form-label">링크 3</label><input type="url" class="form-control" id="linkInput3" placeholder="https://m.blog.naver.com/..."></div><div id="linkModalAlert" class="alert mt-3 hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" class="btn btn-primary" id="saveLinksButton">저장하기</button></div></div></div></div>
+    <div class="modal fade" id="linkModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="modalTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="alert alert-info small">네이버 <b>모바일 버전(m.blog.naver.com)</b> 링크만 가능합니다.<br>(PC버전, <b>클립(Clip)</b>, 단축URL, 타 블로그 불가)</div><p><strong>아이디:</strong> <span id="modalUserId"></span></p><div class="mb-3"><label class="form-label">링크 1 (필수)</label><input type="url" class="form-control" id="linkInput1" placeholder="https://m.blog.naver.com/..."></div><div class="mb-3"><label class="form-label">링크 2</label><input type="url" class="form-control" id="linkInput2" placeholder="https://m.blog.naver.com/..."></div><div class="mb-3"><label class="form-label">링크 3</label><input type="url" class="form-control" id="linkInput3" placeholder="https://m.blog.naver.com/..."></div><div id="linkModalAlert" class="alert mt-3 hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" class="btn btn-danger hidden" id="deleteLinksButton">삭제하기</button><button type="button" class="btn btn-primary" id="saveLinksButton">저장하기</button></div></div></div></div>
     <div class="modal fade" id="completionModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">품앗이 완료 확인</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>금일 모든 품앗이 완료 되었음을 보고 합니다. 좋아요, 댓글, 체류 완료 되었습니다.</p><p class="text-muted small">아래 확인버튼 누르시면 금일 품앗이는 모두 완료됩니다.</p><div id="completionModalAlert" class="alert mt-3 hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="confirmCompletionButton">확인</button></div></div></div></div>
     <div class="modal fade" id="adminPasswordModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">관리자 로그인</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="mb-3"><label for="adminPasswordInput" class="form-label">비밀번호</label><input type="password" class="form-control" id="adminPasswordInput" autocomplete="new-password"></div><div id="adminPasswordAlert" class="alert alert-danger hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="adminSubmitPasswordButton">진입</button></div></div></div></div>
     <div class="modal fade" id="adminEditModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="adminEditTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="adminEditUserId"><div class="mb-3"><label class="form-label">상태 (ACTIVE, BLOCKED)</label><input type="text" class="form-control" id="adminEditStatus"></div><div class="mb-3"><label class="form-label">패널티 횟수</label><input type="number" class="form-control" id="adminEditPenaltyCount" min="0"></div><div class="mb-3"><label class="form-label">잠금 종료일 (yyyy-mm-dd 또는 비우기)</label><input type="text" class="form-control" id="adminEditLockoutDate"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="adminSaveChangesButton">변경사항 저장</button></div></div></div></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfAvIV4JZ8uCTE1SAip5r5oIKkNRDRvCUiTh0JoCv_y-8mnhVzwnX0x2KCWt6XN0_1/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwwFOnjHXIiOU8tmCYFZpyGf_6c8katyIzFO7cdnygq9lugWjIuvu-nA8Unaz4fr6LZ/exec';
     const ADMIN_PASSWORD_FRONT = "7702";
     document.addEventListener('DOMContentLoaded', () => {
         const authView = document.getElementById('authView');
@@ -175,6 +163,7 @@
         const linkInputs = [document.getElementById('linkInput1'), document.getElementById('linkInput2'), document.getElementById('linkInput3')];
         const linkModalAlert = document.getElementById('linkModalAlert');
         const saveLinksButton = document.getElementById('saveLinksButton');
+        const deleteLinksButton = document.getElementById('deleteLinksButton'); // 삭제 버튼
         const confirmCompletionButton = document.getElementById('confirmCompletionButton');
         const completionModalAlert = document.getElementById('completionModalAlert');
         const adminPasswordInput = document.getElementById('adminPasswordInput');
@@ -193,16 +182,17 @@
         let loggedInUserId = null;
         let selectedDateStr = '';
         let completionInterval;
+
         function showView(viewToShow) { allViews.forEach(view => view.classList.add('hidden')); viewToShow.classList.remove('hidden'); }
         function showAlert(alertElement, message, type = 'danger') { alertElement.textContent = message; alertElement.className = `alert alert-${type}`; }
         function hideAlert(alertElement) { alertElement.classList.add('hidden'); }
         async function apiCall(action, params = {}) {
             const isGet = action.startsWith('get');
             const fullUrl = isGet ? `${SCRIPT_URL}?action=${action}&` + new URLSearchParams(params) : SCRIPT_URL;
-            const options = { method: isGet ? 'GET' : 'POST', mode: 'cors' };
+            const options = { method: isGet ? 'GET' : 'POST', redirect: 'follow' };
             if (!isGet) {
-                options.headers = { "Content-Type": "text/plain;charset=utf-8" };
                 options.body = JSON.stringify({ action, ...params });
+                options.headers = { "Content-Type": "text/plain;charset=utf-8" };
             }
             try {
                 const response = await fetch(fullUrl, options);
@@ -275,6 +265,7 @@
             loggedInUserId = null;
             clearInterval(completionInterval);
             showView(authView);
+            location.reload();
         });
         async function renderCalendar(date) {
             const year = date.getFullYear();
@@ -305,13 +296,10 @@
                 const dayLinkCount = linkCounts[i] || 0;
                 totalLinksThisMonth += dayLinkCount;
                 let countHtml = dayLinkCount > 0 ? `<div class="link-count">총 ${dayLinkCount}개</div>` : '';
-                
                 const currentDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-
                 if (currentDateStr === todayStr) {
                     dayDiv.classList.add('today', 'active-day');
                     dayDiv.dataset.date = currentDateStr;
-                    // 수정된 부분: 오늘 날짜에 클릭 유도 문구 추가
                     dayDiv.innerHTML = `<div class="day-number">${i}</div><div class="today-marker">👇 클릭!</div>${countHtml}`;
                 } else {
                     dayDiv.innerHTML = `<div class="day-number">${i}</div>${countHtml}`;
@@ -322,22 +310,61 @@
         }
         prevMonthBtn.addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1); renderCalendar(currentCalendarDate); });
         nextMonthBtn.addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1); renderCalendar(currentCalendarDate); });
-        calendarBody.addEventListener('click', (e) => {
+        
+        // [수정됨] 날짜 클릭 시 기존 데이터 조회 및 삭제 버튼 로직 추가
+        calendarBody.addEventListener('click', async (e) => {
             const dayElement = e.target.closest('.active-day');
             if (dayElement) {
                 selectedDateStr = dayElement.dataset.date;
-                modalTitle.textContent = `${selectedDateStr} 링크 등록`;
+                modalTitle.textContent = `${selectedDateStr} 링크 등록/수정`;
                 modalUserId.textContent = loggedInUserId;
                 linkInputs.forEach(input => input.value = '');
                 hideAlert(linkModalAlert);
+                saveLinksButton.textContent = '저장하기';
+                
+                // 삭제 버튼 기본적으로 숨기기
+                deleteLinksButton.classList.add('hidden');
+
                 linkModal.show();
+                
+                try {
+                    const existingLinks = await apiCall('getLinksForDate', { userId: loggedInUserId, date: selectedDateStr });
+                    if (existingLinks && existingLinks.length > 0) {
+                        saveLinksButton.textContent = '수정하기';
+                        linkInputs[0].value = existingLinks[0] || '';
+                        linkInputs[1].value = existingLinks[1] || '';
+                        linkInputs[2].value = existingLinks[2] || '';
+                        // 기존 링크가 있으면 삭제 버튼 표시
+                        deleteLinksButton.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    showAlert(linkModalAlert, '링크를 불러오는 데 실패했습니다.');
+                }
+                
+                // 시간 체크하여 삭제/저장 버튼 활성화/비활성화
+                const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+                const kstHours = nowKST.getHours();
+
+                if (kstHours >= 18) {
+                    saveLinksButton.disabled = true;
+                    saveLinksButton.title = "오후 6시 이후에는 저장/수정이 불가합니다.";
+                    deleteLinksButton.disabled = true;
+                    deleteLinksButton.title = "오후 6시 이후에는 삭제가 불가합니다.";
+                } else {
+                    saveLinksButton.disabled = false;
+                    saveLinksButton.title = "";
+                    deleteLinksButton.disabled = false;
+                    deleteLinksButton.title = "";
+                }
             }
         });
+        
         function validateLink(url) {
            if (!url.startsWith("https://m.blog.naver.com")) return false;
            if (url.toLowerCase().includes("clip")) return false;
            return true;
         }
+
         saveLinksButton.addEventListener('click', async () => {
             const links = linkInputs.map(input => input.value.trim()).filter(link => link);
             if (links.length === 0) { showAlert(linkModalAlert, '링크를 하나 이상 입력해주세요.'); return; }
@@ -355,38 +382,55 @@
             } catch (error) {
                 showAlert(linkModalAlert, error.message);
             } finally {
-                saveLinksButton.disabled = false;
+                // 시간 체크 후 다시 활성화
+                const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+                if (nowKST.getHours() < 18) {
+                    saveLinksButton.disabled = false;
+                }
             }
         });
+
+        // [신규] 삭제 버튼 이벤트 리스너
+        deleteLinksButton.addEventListener('click', async () => {
+            if (confirm(`정말로 ${selectedDateStr}에 등록된 모든 링크를 삭제하시겠습니까?`)) {
+                deleteLinksButton.disabled = true;
+                try {
+                    const data = await apiCall('deleteLinks', { userId: loggedInUserId, date: selectedDateStr });
+                    showAlert(linkModalAlert, data.message, 'success');
+                    setTimeout(() => { linkModal.hide(); renderCalendar(currentCalendarDate); }, 1500);
+                } catch (error) {
+                    showAlert(linkModalAlert, error.message);
+                } finally {
+                    const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+                    if (nowKST.getHours() < 18) {
+                       deleteLinksButton.disabled = false;
+                    }
+                }
+            }
+        });
+
         function startCompletionTimer() {
             clearInterval(completionInterval);
             completionInterval = setInterval(updateCompletionButtonStatus, 1000);
             updateCompletionButtonStatus();
         }
         function updateCompletionButtonStatus() {
-            const now = new Date();
-            // 한국 시간(UTC+9) 기준으로 계산
-            const kstNow = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+            const kstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
             const kstHours = kstNow.getHours();
             const kstMinutes = kstNow.getMinutes();
-            
-            // 시작 시간: 18시 30분, 종료 시간: 23시 30분
-            const startTime = 18.5; 
-            const endTime = 23.5;
+            const startTime = 18.5, endTime = 23.5;
             const currentTime = kstHours + kstMinutes / 60;
 
-            if (currentTime >= startTime && currentTime <= endTime) {
+            if (currentTime >= startTime && currentTime < endTime) {
                 completionBtn.disabled = false;
                 completionTimer.textContent = "지금 완료 보고가 가능합니다.";
             } else {
                 completionBtn.disabled = true;
                 let nextStart = new Date(kstNow);
                 nextStart.setHours(18, 30, 0, 0);
-                
                 if (kstNow.getTime() > nextStart.getTime()) {
                     nextStart.setDate(nextStart.getDate() + 1);
                 }
-
                 const diff = nextStart - kstNow;
                 const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
                 const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
@@ -399,8 +443,8 @@
             completionModal.show();
         });
         confirmCompletionButton.addEventListener('click', async () => {
-            const today = new Date();
-            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            const todayKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+            const todayStr = `${todayKST.getFullYear()}-${String(todayKST.getMonth() + 1).padStart(2, '0')}-${String(todayKST.getDate()).padStart(2, '0')}`;
             confirmCompletionButton.disabled = true;
             try {
                 const data = await apiCall('recordCompletion', { userId: loggedInUserId, date: todayStr });
@@ -412,6 +456,15 @@
                 confirmCompletionButton.disabled = false;
             }
         });
+        async function loadReportData() { /* ... unchanged ... */ }
+        async function loadDownloadLinks() { /* ... unchanged ... */ }
+        adminLoginBtn.addEventListener('click', () => { /* ... unchanged ... */ });
+        adminSubmitPasswordButton.addEventListener('click', () => { /* ... unchanged ... */ });
+        exitAdminBtn.addEventListener('click', () => { /* ... unchanged ... */ });
+        async function adminFetchUsers() { /* ... unchanged ... */ }
+        adminUserTable.addEventListener('click', async (e) => { /* ... unchanged ... */ });
+        adminSaveChangesButton.addEventListener('click', async () => { /* ... unchanged ... */ });
+        
         async function loadReportData() {
             try {
                 const data = await apiCall('getReportData');
@@ -422,7 +475,7 @@
                     html += `<ul class="list-group">`;
                     data.incompleteUsers.forEach(user => {
                         const penaltyClass = `penalty-${Math.min(user.penaltyCount, 3)}`;
-                        html += `<li class="list-group-item">${user.userId} <span class="badge bg-warning text-dark ${penaltyClass}">패널티 ${user.penaltyCount}회</span></li>`;
+                        html += `<li class="list-group-item">${user.userId} <span class="badge bg-warning text-dark ${penaltyClass}">패널티 ${user.penaltyCount + 1}회</span></li>`;
                     });
                     html += `</ul>`;
                 }
@@ -478,7 +531,7 @@
                     const tr = document.createElement('tr');
                     const lockoutDate = user.LockoutEndDate ? new Date(user.LockoutEndDate).toISOString().split('T')[0] : '';
                     const regDate = user.RegistrationDate ? new Date(user.RegistrationDate).toISOString().split('T')[0] : '';
-                    tr.innerHTML = `<td>${user.UserID}</td><td>${user.BlogLink}</td><td>${regDate}</td><td>${user.Status}</td><td>${user.PenaltyCount}</td><td>${lockoutDate}</td><td><button class="btn btn-sm btn-primary admin-edit-btn" data-user-id="${user.UserID}">관리</button></td>`;
+                    tr.innerHTML = `<td>${user.UserID}</td><td><a href="${user.BlogLink}" target="_blank">${user.BlogLink}</a></td><td>${regDate}</td><td>${user.Status}</td><td>${user.PenaltyCount}</td><td>${lockoutDate}</td><td><button class="btn btn-sm btn-primary admin-edit-btn" data-user-id="${user.UserID}">관리</button></td>`;
                     adminUserTable.appendChild(tr);
                 });
             } catch (error) {
@@ -517,7 +570,7 @@
                 adminSaveChangesButton.disabled = false;
             }
         });
-        
+
         init();
     });
     </script>
