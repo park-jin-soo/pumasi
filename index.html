@@ -105,13 +105,13 @@
                    <div class="rules-box">
                       <h6 class="mb-2 fw-bold">📢 보고서 다운로드 안내</h6>
                       <ul>
-                          <li><strong>오늘의 품앗이 링크 목록:</strong> 매일 저녁 8시 이후 생성되어, 품앗이 활동에 사용됩니다.</li>
+                          <li><strong>오늘의 품앗이 링크 목록:</strong> 매일 저녁 6시 05분 이후 생성되어, 품앗이 활동에 사용됩니다.</li>
                           <li><strong>어제자 활동 완료 보고서:</strong> 매일 밤 12시 5분 이후 생성되며, 미완료 회원 및 패널티 현황을 확인할 수 있습니다.</li>
                       </ul>
                   </div>
                   <div class="card mb-4">
                       <div class="card-header"><h4>보고서 다운로드</h4></div>
-                      <div class="card-body"><div class="list-group"><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>오늘의 품앗이 링크 목록</strong><small class="d-block text-muted">매일 저녁 8시 이후 생성</small></div><a href="#" id="dailyLinksDownloadBtn" class="btn btn-primary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>어제자 활동 완료 보고서</strong><small class="d-block text-muted">매일 밤 12시 5분 이후 생성</small></div><a href="#" id="completionReportDownloadBtn" class="btn btn-secondary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div></div></div>
+                      <div class="card-body"><div class="list-group"><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>오늘의 품앗이 링크 목록</strong><small class="d-block text-muted">매일 저녁 6시 05분에 취합되어 자동 생성</small></div><a href="#" id="dailyLinksDownloadBtn" class="btn btn-primary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>어제자 활동 완료 보고서</strong><small class="d-block text-muted">매일 밤 12시 5분 이후 생성</small></div><a href="#" id="completionReportDownloadBtn" class="btn btn-secondary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div></div></div>
                   </div>
                   <div class="card"><div class="card-header"><h4>어제자 미완료 회원 목록</h4></div><div id="reportContent" class="card-body"><p class="text-center">보고서를 불러오는 중입니다...</p></div></div>
               </div>
@@ -180,7 +180,7 @@
         const adminUserTable = document.getElementById('adminUserTable');
         const exitAdminBtn = document.getElementById('exitAdminBtn');
         const adminAlert = document.getElementById('adminAlert');
-        const adminDownloadTodayLinksBtn = document.getElementById('adminDownloadTodayLinksBtn'); // [신규] 관리자 다운로드 버튼
+        const adminDownloadTodayLinksBtn = document.getElementById('adminDownloadTodayLinksBtn');
         const adminEditTitle = document.getElementById('adminEditTitle');
         const adminEditUserId = document.getElementById('adminEditUserId');
         const adminEditStatus = document.getElementById('adminEditStatus');
@@ -320,6 +320,7 @@
         prevMonthBtn.addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1); renderCalendar(currentCalendarDate); });
         nextMonthBtn.addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1); renderCalendar(currentCalendarDate); });
         
+        // [수정됨] 링크 불러오기 버그 수정
         calendarBody.addEventListener('click', async (e) => {
             const dayElement = e.target.closest('.active-day');
             if (dayElement) {
@@ -335,7 +336,8 @@
                 
                 try {
                     const existingLinks = await apiCall('getLinksForDate', { userId: loggedInUserId, date: selectedDateStr });
-                    if (existingLinks && existingLinks.length > 0 && existingLinks.some(l => l)) {
+                    // 'existingLinks'가 null이 아니고, 배열이며, 내용이 있는 링크가 하나라도 있는지 확인
+                    if (existingLinks && Array.isArray(existingLinks) && existingLinks.some(link => link)) {
                         saveLinksButton.textContent = '수정하기';
                         linkInputs[0].value = existingLinks[0] || '';
                         linkInputs[1].value = existingLinks[1] || '';
@@ -343,7 +345,8 @@
                         deleteLinksButton.classList.remove('hidden');
                     }
                 } catch (error) {
-                    showAlert(linkModalAlert, '링크를 불러오는 데 실패했습니다.');
+                    console.error("Error fetching links for date:", error);
+                    showAlert(linkModalAlert, '링크를 불러오는 데 실패했습니다: ' + error.message);
                 }
                 
                 const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
@@ -518,7 +521,6 @@
             showView(mainView);
         });
 
-        // [신규] 관리자 다운로드 버튼 클릭 이벤트
         adminDownloadTodayLinksBtn.addEventListener('click', async () => {
             const btn = adminDownloadTodayLinksBtn;
             btn.disabled = true;
@@ -547,7 +549,6 @@
                     const lockoutDate = user.LockoutEndDate ? new Date(user.LockoutEndDate).toISOString().split('T')[0] : '';
                     const regDate = user.RegistrationDate ? new Date(user.RegistrationDate).toISOString().split('T')[0] : '';
                     
-                    // [수정] 상태를 한글로 변환
                     let statusKorean = '';
                     let statusClass = '';
                     if (user.Status === 'ACTIVE') {
@@ -580,7 +581,7 @@
                 const cells = row.querySelectorAll('td');
                 adminEditTitle.textContent = `${userId}님 정보 수정`;
                 adminEditUserId.value = userId;
-                adminEditStatus.value = cells[3].dataset.status; // [수정] data-status 속성에서 원본 값 가져오기
+                adminEditStatus.value = cells[3].dataset.status;
                 adminEditPenaltyCount.value = cells[4].textContent;
                 adminEditLockoutDate.value = cells[5].textContent;
                 adminEditModal.show();
@@ -589,7 +590,7 @@
         adminSaveChangesButton.addEventListener('click', async () => {
             const userData = {
                 UserID: adminEditUserId.value,
-                Status: adminEditStatus.value.trim().toUpperCase(), // 사용자가 소문자로 입력해도 대문자로 변환
+                Status: adminEditStatus.value.trim().toUpperCase(),
                 PenaltyCount: parseInt(adminEditPenaltyCount.value, 10),
                 LockoutEndDate: adminEditLockoutDate.value.trim()
             };
