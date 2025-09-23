@@ -80,9 +80,16 @@
         <div class="app-container">
             <header class="header"><h1>네이버 품앗이 센터 V2</h1></header>
 
+            <div class="alert alert-warning border-warning mb-3" style="background-color: #fff3cd; border-left: 5px solid #ffc107;">
+                <div class="text-center">
+                    <strong style="color: #856404;">오픈채팅방 가입회원만 회원가입이 가능합니다.</strong><br>
+                    <span style="color: #dc3545; font-weight: bold;">블로그 대행사, 실행사 등 관련 마케터는 적발시 바로 내보내기 됩니다.</span>
+                </div>
+            </div>
+
             <div class="text-center mb-4">
                 <a href="https://open.kakao.com/o/g0BjbBQh" target="_blank" rel="noopener noreferrer" class="btn btn-warning fw-bold">
-                    💬 카카오톡 오픈채팅방으로 오세요!
+                    카카오톡 오픈채팅방으로 들어가기
                 </a>
             </div>
 
@@ -95,7 +102,7 @@
                         </ul>
                         <div class="tab-content">
                           <div class="tab-pane active" id="login" role="tabpanel"><h5 class="card-title text-center mb-3">로그인</h5><div class="mb-3"><label for="loginIdInput" class="form-label">블로그 아이디</label><input type="text" class="form-control" id="loginIdInput"></div><div class="d-grid"><button id="loginButton" class="btn btn-primary">로그인</button></div></div>
-                          <div class="tab-pane" id="register" role="tabpanel"><h5 class="card-title text-center mb-3">회원가입</h5><div class="mb-3"><label for="registerIdInput" class="form-label">블로그 아이디</label><input type="text" class="form-control" id="registerIdInput"></div><div class="mb-3"><label for="registerLinkInput" class="form-label">블로그 링크 (모바일)</label><input type="url" class="form-control" id="registerLinkInput" placeholder="https://m.blog.naver.com/아이디"></div><div class="d-grid"><button id="registerButton" class="btn btn-success">가입하기</button></div></div>
+                          <div class="tab-pane" id="register" role="tabpanel"><h5 class="card-title text-center mb-3">회원가입</h5><div class="mb-3"><label for="registerIdInput" class="form-label">블로그 아이디</label><input type="text" class="form-control" id="registerIdInput" placeholder="블로그닉네임이 아닌 아이디를 입력해주세요"></div><div class="mb-3"><label for="registerLinkInput" class="form-label">블로그 링크 (모바일)</label><input type="url" class="form-control" id="registerLinkInput" placeholder="https://m.blog.naver.com/아이디" readonly></div><div class="mb-3"><label for="registerPostCountInput" class="form-label">1주일 블로그 포스팅 횟수(3회 이하 가입금지)</label><input type="number" class="form-control" id="registerPostCountInput" placeholder="최소 3회 이상" min="0"></div><div class="mb-4"><h6 class="fw-bold text-primary mb-3">안내문 - 꼭 읽어보세요</h6><div class="border p-3 mb-3" style="background-color: #f8f9fa; font-size: 0.9rem; line-height: 1.5;"><p class="mb-2">오픈채팅방 가입은 상단 클릭후 가입하세요</p><p class="mb-2">본 품앗이 프로그램 및 블로그 관련프로그램 사용하시려면 카카오톡 오픈채팅방의 회원에 한해서만 가입이 승인 이됩니다.</p><p class="mb-2">저희 채우미 자동품앗이 회원으로 활동하시려면 1주일 최소3회 이상 월 12회 이상의 포스팅을 유지하셔야 합니다.</p><p class="mb-2">품앗이를 기본으로 하는 방이므로 프로그램만 사용하시려 하신다면 죄송하지만 가입이 어렵습니다.</p><p class="mb-0">품앗이 보다 다른 프로그램 사용량이 많아질경우 유료로 전환 할 예정입니다.</p></div><div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="isMemberCheck"><label class="form-check-label" for="isMemberCheck">회원이신 가요?</label></div><div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="agreeTermsCheck"><label class="form-check-label" for="agreeTermsCheck">안내문 내용 확인하였습니다.</label></div></div><div class="d-grid"><button id="registerButton" class="btn btn-success">가입하기</button></div></div>
                         </div>
                         <div id="authAlert" class="alert mt-3 hidden" role="alert"></div>
                     </div>
@@ -113,7 +120,7 @@
                 <ul class="nav nav-tabs nav-fill mb-3" id="mainAppTab" role="tablist">
                   <li class="nav-item" role="presentation"><button class="nav-link active" id="submission-tab" data-bs-toggle="tab" data-bs-target="#submission" type="button" role="tab">품앗이 링크 저장</button></li>
                   <li class="nav-item" role="presentation"><button class="nav-link" id="completion-tab" data-bs-toggle="tab" data-bs-target="#completion" type="button" role="tab">품앗이 완료 확인</button></li>
-                  <li class="nav-item" role="presentation"><button class="nav-link" id="downloads-tab" data-bs-toggle="tab" data-bs-target="#downloads" type="button" role="tab">보고서 다운로드</button></li>
+                  <li class="nav-item" role="presentation"><button class="nav-link" id="downloads-tab" data-bs-toggle="tab" data-bs-target="#downloads" type="button" role="tab">품앗이 미완료</button></li>
                 </ul>
                 <div class="tab-content">
                   <div class="tab-pane active" id="submission" role="tabpanel">
@@ -141,15 +148,11 @@
                   </div>
                   <div class="tab-pane" id="downloads" role="tabpanel">
                        <div class="rules-box">
-                          <h6 class="mb-2 fw-bold">📢 보고서 다운로드 안내</h6>
+                          <h6 class="mb-2 fw-bold">📢 품앗이 미완료 회원 현황</h6>
                           <ul>
-                              <li><strong>오늘의 품앗이 링크 목록:</strong> 매일 저녁 6시 05분 이후 생성되어, 품앗이 활동에 사용됩니다.</li>
                               <li><strong>어제자 활동 완료 보고서:</strong> 매일 밤 12시 5분 이후 생성되며, 미완료 회원 및 패널티 현황을 확인할 수 있습니다.</li>
+                              <li>미완료 회원은 자동으로 패널티가 부과되며, 패널티 횟수에 따라 제재가 적용됩니다.</li>
                           </ul>
-                      </div>
-                      <div class="card mb-4">
-                          <div class="card-header"><h4>보고서 다운로드</h4></div>
-                          <div class="card-body"><div class="list-group"><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>오늘의 품앗이 링크 목록</strong><small class="d-block text-muted">매일 저녁 6시 05분에 취합되어 자동 생성</small></div><a href="#" id="dailyLinksDownloadBtn" class="btn btn-primary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div><div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>어제자 활동 완료 보고서</strong><small class="d-block text-muted">매일 밤 12시 5분 이후 생성</small></div><a href="#" id="completionReportDownloadBtn" class="btn btn-secondary disabled" target="_blank" rel="noopener noreferrer">다운로드</a></div></div></div>
                       </div>
                       <div class="card"><div class="card-header"><h4>어제자 미완료 회원 목록</h4></div><div id="reportContent" class="card-body"><p class="text-center">보고서를 불러오는 중입니다...</p></div></div>
                   </div>
@@ -209,6 +212,9 @@
         const loginButton = document.getElementById('loginButton');
         const registerIdInput = document.getElementById('registerIdInput');
         const registerLinkInput = document.getElementById('registerLinkInput');
+        const registerPostCountInput = document.getElementById('registerPostCountInput');
+        const isMemberCheck = document.getElementById('isMemberCheck');
+        const agreeTermsCheck = document.getElementById('agreeTermsCheck');
         const registerButton = document.getElementById('registerButton');
         const authAlert = document.getElementById('authAlert');
         const welcomeMessage = document.getElementById('welcomeMessage');
@@ -223,8 +229,6 @@
         const completionBtn = document.getElementById('completionBtn');
         const completionTimer = document.getElementById('completionTimer');
         const reportContent = document.getElementById('reportContent');
-        const dailyLinksDownloadBtn = document.getElementById('dailyLinksDownloadBtn');
-        const completionReportDownloadBtn = document.getElementById('completionReportDownloadBtn');
         const linkModal = new bootstrap.Modal(document.getElementById('linkModal'));
         const completionModal = new bootstrap.Modal(document.getElementById('completionModal'));
         const adminPasswordModal = new bootstrap.Modal(document.getElementById('adminPasswordModal'));
@@ -288,6 +292,16 @@
             } else {
                 showView(authView);
             }
+            
+            // 블로그 아이디 입력 시 자동 링크 생성
+            registerIdInput.addEventListener('input', function() {
+                const userId = this.value.trim();
+                if (userId) {
+                    registerLinkInput.value = `https://m.blog.naver.com/${userId}`;
+                } else {
+                    registerLinkInput.value = '';
+                }
+            });
         }
         function initializeApp() {
             welcomeMessage.textContent = loggedInUserId;
@@ -296,7 +310,6 @@
             renderCalendar(currentCalendarDate);
             startCompletionTimer();
             loadReportData();
-            loadDownloadLinks();
             loadBanners(); // [신규] 배너 로딩
         }
         async function loadBanners() {
@@ -348,9 +361,32 @@
         registerButton.addEventListener('click', async () => {
             const userId = registerIdInput.value.trim();
             const blogLink = registerLinkInput.value.trim();
-            if (!userId || !blogLink) { showAlert(authAlert, "아이디와 블로그 링크를 모두 입력하세요."); return; }
+            const postCount = parseInt(registerPostCountInput.value) || 0;
+            
+            // 입력 검증
+            if (!userId || !blogLink) { 
+                showAlert(authAlert, "아이디와 블로그 링크를 모두 입력하세요."); 
+                return; 
+            }
+            
+            if (postCount < 3) {
+                showAlert(authAlert, "1주일 포스팅 횟수는 최소 3회 이상이어야 합니다.");
+                return;
+            }
+            
+            // 체크박스 검증
+            if (!isMemberCheck.checked) {
+                showAlert(authAlert, "카카오톡 오픈채팅방 회원 여부를 확인해주세요.");
+                return;
+            }
+            
+            if (!agreeTermsCheck.checked) {
+                showAlert(authAlert, "안내문 내용을 확인하고 동의해주세요.");
+                return;
+            }
+            
             try {
-                const data = await apiCall('registerUser', { userId, blogLink });
+                const data = await apiCall('registerUser', { userId, blogLink, postCount });
                 showAlert(authAlert, data.message, 'success');
                 document.getElementById('login-tab').click();
             } catch (error) {
@@ -566,27 +602,6 @@
                 reportContent.innerHTML = html;
             } catch (error) {
                 reportContent.innerHTML = `<p class="text-danger">보고서 로딩 실패: ${error.message}</p>`;
-            }
-        }
-        async function loadDownloadLinks() {
-            try {
-                const data = await apiCall('getDownloadLinks');
-                if (data.dailyLinkUrl) {
-                    dailyLinksDownloadBtn.href = data.dailyLinkUrl;
-                    dailyLinksDownloadBtn.classList.remove('disabled');
-                } else {
-                    dailyLinksDownloadBtn.href = '#';
-                    dailyLinksDownloadBtn.classList.add('disabled');
-                }
-                if (data.completionReportUrl) {
-                    completionReportDownloadBtn.href = data.completionReportUrl;
-                    completionReportDownloadBtn.classList.remove('disabled');
-                } else {
-                    completionReportDownloadBtn.href = '#';
-                    completionReportDownloadBtn.classList.add('disabled');
-                }
-            } catch (error) {
-                console.error("Failed to load download links:", error);
             }
         }
         adminLoginBtn.addEventListener('click', () => {
