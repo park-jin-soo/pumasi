@@ -1196,16 +1196,27 @@
                 if (confirm(`정말로 "${userId}" 회원을 탈퇴 처리하시겠습니까?\n\n- 일반탈퇴: 해당 사용자는 언제든지 다시 가입할 수 있습니다.\n- 모든 데이터는 보존되며, 재가입 시 기존 정보를 복구할 수 있습니다.`)) {
                     e.target.disabled = true;
                     e.target.textContent = '처리중...';
+                    console.log('탈퇴 처리 시작:', userId);
+                    
                     try {
-                        const data = await apiCall('adminWithdrawUser', { 
+                        // 먼저 사용자 상태를 WITHDRAWN으로 업데이트
+                        const updateData = await apiCall('adminUpdateUser', { 
                             password: ADMIN_PASSWORD_FRONT, 
-                            userId: userId, 
-                            withdrawType: 'normal'
+                            userData: {
+                                UserID: userId,
+                                Status: 'WITHDRAWN',
+                                PenaltyCount: 0,
+                                LockoutEndDate: ''
+                            }
                         });
-                        showAlert(adminAlert, data.message, 'success');
-                        adminFetchUsers();
+                        console.log('탈퇴 처리 응답:', updateData);
+                        showAlert(adminAlert, `"${userId}" 회원이 탈퇴 처리되었습니다. (재가입 가능)`, 'success');
+                        setTimeout(() => {
+                            adminFetchUsers(); // 1초 후 새로고침
+                        }, 1000);
                     } catch (error) {
-                        showAlert(adminAlert, error.message);
+                        console.error('탈퇴 처리 오류:', error);
+                        showAlert(adminAlert, `탈퇴 처리 실패: ${error.message}`, 'danger');
                     } finally {
                         e.target.disabled = false;
                         e.target.textContent = '탈퇴';
@@ -1221,16 +1232,27 @@
                     if (confirm(`마지막 확인입니다.\n\n"${userId}" 회원을 정말로 영구탈퇴 처리하시겠습니까?\n\n이 작업은 절대 되돌릴 수 없습니다!`)) {
                         e.target.disabled = true;
                         e.target.textContent = '처리중...';
+                        console.log('영구탈퇴 처리 시작:', userId);
+                        
                         try {
-                            const data = await apiCall('adminWithdrawUser', { 
+                            // 사용자 상태를 PERMANENTLY_WITHDRAWN으로 업데이트
+                            const updateData = await apiCall('adminUpdateUser', { 
                                 password: ADMIN_PASSWORD_FRONT, 
-                                userId: userId, 
-                                withdrawType: 'permanent'
+                                userData: {
+                                    UserID: userId,
+                                    Status: 'PERMANENTLY_WITHDRAWN',
+                                    PenaltyCount: 0,
+                                    LockoutEndDate: ''
+                                }
                             });
-                            showAlert(adminAlert, data.message, 'warning');
-                            adminFetchUsers();
+                            console.log('영구탈퇴 처리 응답:', updateData);
+                            showAlert(adminAlert, `"${userId}" 회원이 영구탈퇴 처리되었습니다. (재가입 불가)`, 'warning');
+                            setTimeout(() => {
+                                adminFetchUsers(); // 1초 후 새로고침
+                            }, 1000);
                         } catch (error) {
-                            showAlert(adminAlert, error.message);
+                            console.error('영구탈퇴 처리 오류:', error);
+                            showAlert(adminAlert, `영구탈퇴 처리 실패: ${error.message}`, 'danger');
                         } finally {
                             e.target.disabled = false;
                             e.target.textContent = '영구탈퇴';
