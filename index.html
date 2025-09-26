@@ -6,18 +6,134 @@
     <title>블로그 자동화 센터 V3.0</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body { 
+            background-color: #f8f9fa; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+        }
         
-        /* [신규] 3단 레이아웃 스타일 */
+        /* 인트로 페이지 스타일 */
+        .intro-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .intro-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0" stop-color="rgba(255,255,255,.1)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><circle fill="url(%23a)" cx="10" cy="10" r="10"/><circle fill="url(%23a)" cx="90" cy="10" r="10"/></svg>') repeat;
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .intro-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .intro-hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+        .intro-cta-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        .intro-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(238, 90, 36, 0.6);
+        }
+        @keyframes pulse-glow {
+            from { box-shadow: 0 10px 30px rgba(238, 90, 36, 0.4); }
+            to { box-shadow: 0 15px 35px rgba(238, 90, 36, 0.7); }
+        }
+
+        .features-section {
+            padding: 80px 0;
+            background: white;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: none;
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            font-size: 2rem;
+        }
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .feature-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+        }
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* 기존 스타일들 */
         .main-layout {
             display: flex;
             justify-content: center;
             gap: 15px;
         }
         .banner-container {
-            width: 180px; /* 배너 컨테이너 너비 */
+            width: 180px;
             flex-shrink: 0;
-            padding-top: 8rem; /* 헤더 높이만큼 패딩 추가 */
+            padding-top: 8rem;
         }
         .banner-container img {
             width: 100%;
@@ -29,13 +145,11 @@
              max-width: 800px;
              width: 100%;
         }
-        /* 화면이 1200px보다 작아지면 배너 숨김 */
         @media (max-width: 1200px) {
             .banner-container {
                 display: none;
             }
         }
-        /* 기존 스타일 */
         .header { padding: 2rem 0; text-align: center; }
         .header h1 { font-weight: 700; }
         .auth-container { max-width: 400px; margin: auto; }
@@ -71,9 +185,199 @@
         .penalty-info .badge { margin-right: 8px; }
         .status-active { color: #198754; font-weight: bold; }
         .status-blocked { color: #dc3545; font-weight: bold; }
+
+        /* 팝업 스타일 */
+        .custom-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .custom-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        .custom-popup.show .popup-content {
+            transform: scale(1);
+        }
+        .popup-icon {
+            font-size: 4rem;
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+        .popup-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .popup-text {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .popup-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .popup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
     </style>
 </head>
 <body>
+    <!-- 인트로 페이지 -->
+    <div id="introView">
+        <!-- 히어로 섹션 -->
+        <section class="intro-hero">
+            <div class="container">
+                <h1>블로그 품앗이 자동화</h1>
+                <p>네이버 블로그 방문자 수를 자동으로 늘려보세요!</p>
+                <button id="startBtn" class="btn intro-cta-btn text-white">
+                    🚀 품앗이 자동화 사용하러가기
+                </button>
+            </div>
+        </section>
+
+        <!-- 주요 기능 섹션 -->
+        <section class="features-section">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        <h2 class="display-5 fw-bold mb-3">왜 품앗이 자동화를 사용해야 할까요?</h2>
+                        <p class="lead text-muted">효율적인 블로그 운영을 위한 스마트한 선택입니다</p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <span>📈</span>
+                            </div>
+                            <h3 class="feature-title">방문자 수 증가</h3>
+                            <p class="feature-desc">상호 방문을 통해 블로그 방문자 수와 페이지뷰를 자연스럽게 늘릴 수 있습니다.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <span>⚡</span>
+                            </div>
+                            <h3 class="feature-title">자동화 시스템</h3>
+                            <p class="feature-desc">매일 수동으로 할 필요 없이 자동화된 시스템으로 편리하게 품앗이를 진행하세요.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <span>🤝</span>
+                            </div>
+                            <h3 class="feature-title">공정한 품앗이</h3>
+                            <p class="feature-desc">모든 회원이 공정하게 참여할 수 있는 체계적인 품앗이 시스템을 제공합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 통계 섹션 -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="stat-item">
+                            <span class="stat-number">500+</span>
+                            <span class="stat-label">활성 사용자</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-item">
+                            <span class="stat-number">10,000+</span>
+                            <span class="stat-label">월간 품앗이 수</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-item">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">만족도</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 사용 방법 섹션 -->
+        <section style="padding: 80px 0; background: #f8f9fa;">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        <h2 class="display-5 fw-bold mb-3">간단한 3단계로 시작하세요</h2>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="feature-icon mb-3">
+                                <span>1️⃣</span>
+                            </div>
+                            <h4>카카오톡 오픈채팅방 가입</h4>
+                            <p class="text-muted">먼저 카카오톡 오픈채팅방에 가입해주세요</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="feature-icon mb-3">
+                                <span>2️⃣</span>
+                            </div>
+                            <h4>회원가입 및 블로그 등록</h4>
+                            <p class="text-muted">네이버 블로그 정보를 등록하여 회원가입</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="feature-icon mb-3">
+                                <span>3️⃣</span>
+                            </div>
+                            <h4>품앗이 시작</h4>
+                            <p class="text-muted">품앗이 링크를 등록하고 자동화 시작!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-5">
+                    <button id="startBtn2" class="btn intro-cta-btn text-white btn-lg">
+                        지금 시작하기 →
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 기존 메인 애플리케이션 -->
     <div class="main-layout">
         <div id="left-banners" class="banner-container"></div>
         
@@ -207,19 +511,45 @@
 
         <div id="right-banners" class="banner-container"></div>
     </div>
+
+    <!-- 팝업 -->
+    <div id="chatRoomPopup" class="custom-popup">
+        <div class="popup-content">
+            <div class="popup-icon">⚠️</div>
+            <h3 class="popup-title">안내</h3>
+            <p class="popup-text">
+                본 프로그램을 이용하기 위해서는<br>
+                <strong>카카오톡 오픈채팅방 가입</strong>이 필요합니다.<br><br>
+                먼저 오픈채팅방에 가입하신 후<br>
+                회원가입을 진행해주세요.
+            </p>
+            <button id="popupConfirmBtn" class="popup-btn">확인</button>
+        </div>
+    </div>
+
+    <!-- 기존 모달들 -->
     <div class="modal fade" id="linkModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="modalTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="alert alert-info small">네이버 <b>모바일 버전(m.blog.naver.com)</b> 링크만 가능합니다.<br>(PC버전, <b>클립(Clip)</b>, 단축URL, 타 블로그 불가)</div><p><strong>아이디:</strong> <span id="modalUserId"></span></p><div class="mb-3"><label class="form-label">링크 1 (필수)</label><input type="url" class="form-control" id="linkInput1" placeholder="https://m.blog.naver.com/..."></div><div class="mb-3"><label class="form-label">링크 2</label><input type="url" class="form-control" id="linkInput2" placeholder="https://m.blog.naver.com/..."></div><div class="mb-3"><label class="form-label">링크 3</label><input type="url" class="form-control" id="linkInput3" placeholder="https://m.blog.naver.com/..."></div><div id="linkModalAlert" class="alert mt-3 hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" class="btn btn-danger hidden" id="deleteLinksButton">삭제하기</button><button type="button" class="btn btn-primary" id="saveLinksButton">저장하기</button></div></div></div></div>
     <div class="modal fade" id="completionModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">품앗이 완료 확인</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>금일 모든 품앗이 완료 되었음을 보고 합니다. 좋아요, 댓글, 체류 완료 되었습니다.</p><p class="text-muted small">아래 확인버튼 누르시면 금일 품앗이는 모두 완료됩니다.</p><div id="completionModalAlert" class="alert mt-3 hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="confirmCompletionButton">확인</button></div></div></div></div>
     <div class="modal fade" id="adminPasswordModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">관리자 로그인</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="mb-3"><label for="adminPasswordInput" class="form-label">비밀번호</label><input type="password" class="form-control" id="adminPasswordInput" autocomplete="new-password"></div><div id="adminPasswordAlert" class="alert alert-danger hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="adminSubmitPasswordButton">진입</button></div></div></div></div>
     <div class="modal fade" id="adminEditModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="adminEditTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="adminEditUserId"><div class="mb-3"><label class="form-label">상태 (ACTIVE, BLOCKED)</label><input type="text" class="form-control" id="adminEditStatus"></div><div class="mb-3"><label class="form-label">패널티 횟수</label><input type="number" class="form-control" id="adminEditPenaltyCount" min="0"></div><div class="mb-3"><label class="form-label">잠금 종료일 (yyyy-mm-dd 또는 비우기)</label><input type="text" class="form-control" id="adminEditLockoutDate"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="adminSaveChangesButton">변경사항 저장</button></div></div></div></div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmbkAIcIapGc3v_UKFozsHpoKFu5al0HRSrYbRb6qFmjA99gHr6IwinQMR93_Gfuu0/exec';
     const ADMIN_PASSWORD_FRONT = "7702";
+    
     document.addEventListener('DOMContentLoaded', () => {
+        const introView = document.getElementById('introView');
         const authView = document.getElementById('authView');
         const mainView = document.getElementById('mainView');
         const adminView = document.getElementById('adminView');
-        const allViews = [authView, mainView, adminView];
+        const allViews = [introView, authView, mainView, adminView];
+        const chatRoomPopup = document.getElementById('chatRoomPopup');
+        const popupConfirmBtn = document.getElementById('popupConfirmBtn');
+        const startBtn = document.getElementById('startBtn');
+        const startBtn2 = document.getElementById('startBtn2');
+        
+        // 기존 요소들
         const loginIdInput = document.getElementById('loginIdInput');
         const loginButton = document.getElementById('loginButton');
         const registerIdInput = document.getElementById('registerIdInput');
@@ -271,14 +601,65 @@
         const adminEditPenaltyCount = document.getElementById('adminEditPenaltyCount');
         const adminEditLockoutDate = document.getElementById('adminEditLockoutDate');
         const adminSaveChangesButton = document.getElementById('adminSaveChangesButton');
+        
         let currentCalendarDate = new Date();
         let loggedInUserId = null;
         let selectedDateStr = '';
         let completionInterval;
 
-        function showView(viewToShow) { allViews.forEach(view => view.classList.add('hidden')); viewToShow.classList.remove('hidden'); }
-        function showAlert(alertElement, message, type = 'danger') { alertElement.textContent = message; alertElement.className = `alert alert-${type}`; }
-        function hideAlert(alertElement) { alertElement.classList.add('hidden'); }
+        function showView(viewToShow) { 
+            allViews.forEach(view => view.classList.add('hidden')); 
+            viewToShow.classList.remove('hidden'); 
+            
+            // 인트로 페이지가 아닌 경우에만 메인 레이아웃 표시
+            const mainLayout = document.querySelector('.main-layout');
+            if (viewToShow === introView) {
+                mainLayout.style.display = 'none';
+            } else {
+                mainLayout.style.display = 'flex';
+            }
+        }
+        
+        function showAlert(alertElement, message, type = 'danger') { 
+            alertElement.textContent = message; 
+            alertElement.className = `alert alert-${type}`; 
+        }
+        
+        function hideAlert(alertElement) { 
+            alertElement.classList.add('hidden'); 
+        }
+        
+        // 팝업 표시 함수
+        function showPopup() {
+            chatRoomPopup.classList.add('show');
+        }
+        
+        function hidePopup() {
+            chatRoomPopup.classList.remove('show');
+        }
+        
+        // 시작하기 버튼들 이벤트
+        startBtn.addEventListener('click', () => {
+            showPopup();
+        });
+        
+        startBtn2.addEventListener('click', () => {
+            showPopup();
+        });
+        
+        // 팝업 확인 버튼 이벤트
+        popupConfirmBtn.addEventListener('click', () => {
+            hidePopup();
+            showView(authView);
+        });
+        
+        // 팝업 외부 클릭 시 닫기
+        chatRoomPopup.addEventListener('click', (e) => {
+            if (e.target === chatRoomPopup) {
+                hidePopup();
+            }
+        });
+        
         async function apiCall(action, params = {}) {
             const isGet = action.startsWith('get');
             const fullUrl = isGet ? `${SCRIPT_URL}?action=${action}&` + new URLSearchParams(params) : SCRIPT_URL;
@@ -298,13 +679,14 @@
                 throw error;
             }
         }
+        
         function init() {
             loggedInUserId = localStorage.getItem('pumasi_user_id');
             if (loggedInUserId) {
                 showView(mainView);
                 initializeApp();
             } else {
-                showView(authView);
+                showView(introView); // 인트로 페이지 먼저 보여주기
             }
             
             // 블로그 아이디 입력 시 자동 링크 생성
@@ -317,6 +699,7 @@
                 }
             });
         }
+        
         function initializeApp() {
             welcomeMessage.textContent = loggedInUserId;
             const regDate = localStorage.getItem('pumasi_reg_date');
@@ -324,9 +707,10 @@
             renderCalendar(currentCalendarDate);
             startCompletionTimer();
             loadReportData();
-            loadBanners(); // [신규] 배너 로딩
-            recordVisitAndLoadStats(); // [신규] 방문 기록 및 통계 로딩
+            loadBanners();
+            recordVisitAndLoadStats();
         }
+        
         async function loadBanners() {
             try {
                 const banners = await apiCall('getPublicBanners');
@@ -349,6 +733,7 @@
                 console.error('Failed to load banners:', error);
             }
         }
+        
         function displayUserInfo(regDateStr) {
             if (!regDateStr) return;
             const regDate = new Date(regDateStr);
@@ -359,6 +744,7 @@
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
             userInfoText.textContent = `가입일: ${regDateStr} (가입 ${diffDays}일차)`;
         }
+        
         loginButton.addEventListener('click', async () => {
             const userId = loginIdInput.value.trim();
             if (!userId) { showAlert(authAlert, "아이디를 입력하세요."); return; }
@@ -373,12 +759,12 @@
                 showAlert(authAlert, error.message);
             }
         });
+        
         registerButton.addEventListener('click', async () => {
             const userId = registerIdInput.value.trim();
             const blogLink = registerLinkInput.value.trim();
             const postCount = parseInt(registerPostCountInput.value) || 0;
             
-            // 입력 검증
             if (!userId || !blogLink) { 
                 showAlert(authAlert, "아이디와 블로그 링크를 모두 입력하세요."); 
                 return; 
@@ -389,7 +775,6 @@
                 return;
             }
             
-            // 체크박스 검증
             if (!isMemberCheck.checked) {
                 showAlert(authAlert, "카카오톡 오픈채팅방 회원 여부를 확인해주세요.");
                 return;
@@ -408,14 +793,16 @@
                 showAlert(authAlert, error.message);
             }
         });
+        
         logoutButton.addEventListener('click', () => {
             localStorage.removeItem('pumasi_user_id');
             localStorage.removeItem('pumasi_reg_date');
             loggedInUserId = null;
             clearInterval(completionInterval);
-            showView(authView);
+            showView(introView); // 인트로 페이지로 돌아가기
             location.reload();
         });
+        
         async function renderCalendar(date) {
             const year = date.getFullYear();
             const month = date.getMonth();
@@ -457,6 +844,7 @@
             }
             monthlyTotalCount.textContent = `월 합산: ${totalLinksThisMonth}개`;
         }
+        
         prevMonthBtn.addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1); renderCalendar(currentCalendarDate); });
         nextMonthBtn.addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1); renderCalendar(currentCalendarDate); });
         
@@ -557,6 +945,7 @@
             completionInterval = setInterval(updateCompletionButtonStatus, 1000);
             updateCompletionButtonStatus();
         }
+        
         function updateCompletionButtonStatus() {
             const kstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
             const kstHours = kstNow.getHours();
@@ -581,10 +970,12 @@
                 completionTimer.textContent = `완료 보고 활성화까지 남은 시간: ${h}:${m}:${s}`;
             }
         }
+        
         completionBtn.addEventListener('click', () => {
             hideAlert(completionModalAlert);
             completionModal.show();
         });
+        
         confirmCompletionButton.addEventListener('click', async () => {
             const todayKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
             const todayStr = `${todayKST.getFullYear()}-${String(todayKST.getMonth() + 1).padStart(2, '0')}-${String(todayKST.getDate()).padStart(2, '0')}`;
@@ -599,12 +990,10 @@
                 confirmCompletionButton.disabled = false;
             }
         });
+        
         async function recordVisitAndLoadStats() {
             try {
-                // 방문 기록
                 await apiCall('recordVisit', { userId: loggedInUserId });
-                
-                // 방문자 통계 조회
                 const stats = await apiCall('getVisitorStats');
                 totalVisitors.textContent = stats.totalVisitors || 0;
                 todayVisitors.textContent = stats.todayVisitors || 0;
@@ -614,6 +1003,7 @@
                 todayVisitors.textContent = '-';
             }
         }
+        
         async function loadReportData() {
             try {
                 const data = await apiCall('getReportData');
@@ -634,22 +1024,25 @@
                 reportContent.innerHTML = `<p class="text-danger">보고서 로딩 실패: ${error.message}</p>`;
             }
         }
+        
         adminLoginBtn.addEventListener('click', () => {
             adminPasswordInput.value = '';
             hideAlert(adminPasswordAlert);
             adminPasswordModal.show();
         });
+        
         adminSubmitPasswordButton.addEventListener('click', () => {
             const pass = adminPasswordInput.value;
             if (pass === ADMIN_PASSWORD_FRONT) {
                 adminPasswordModal.hide();
                 showView(adminView);
                 adminFetchUsers();
-                adminLoadBanners(); // [신규] 관리자 배너 관리 UI 로딩
+                adminLoadBanners();
             } else {
                 showAlert(adminPasswordAlert, "비밀번호가 틀렸습니다.");
             }
         });
+        
         exitAdminBtn.addEventListener('click', () => {
             showView(mainView);
         });
@@ -708,7 +1101,6 @@
             }
         }
         
-        // [신규] 관리자용 배너 관리 UI를 생성하고 데이터를 채우는 함수
         async function adminLoadBanners() {
             hideAlert(adminAlert);
             adminBannersContainer.innerHTML = '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>';
@@ -741,7 +1133,6 @@
             }
         }
 
-        // [신규] 관리자 배너 저장 버튼 이벤트 처리
         adminBannersContainer.addEventListener('click', async (e) => {
             if (e.target.classList.contains('admin-save-banner-btn')) {
                 const btn = e.target;
@@ -781,6 +1172,7 @@
                 adminEditModal.show();
             }
         });
+        
         adminSaveChangesButton.addEventListener('click', async () => {
             const userData = {
                 UserID: adminEditUserId.value,
