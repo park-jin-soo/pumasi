@@ -253,9 +253,7 @@
     </style>
 </head>
 <body>
-    <!-- 인트로 페이지 -->
     <div id="introView">
-        <!-- 히어로 섹션 -->
         <section class="intro-hero">
             <div class="container">
                 <h1>블로그 품앗이 자동화</h1>
@@ -271,7 +269,6 @@
             </div>
         </section>
 
-        <!-- 주요 기능 섹션 -->
         <section class="features-section">
             <div class="container">
                 <div class="row text-center mb-5">
@@ -310,7 +307,6 @@
                     </div>
                 </div>
                 
-                <!-- 문제점 해결 섹션 -->
                 <div class="row mb-5">
                     <div class="col-12">
                         <div class="card border-0" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
@@ -388,7 +384,6 @@
             </div>
         </section>
 
-        <!-- 통계 섹션 -->
         <section class="stats-section">
             <div class="container">
                 <div class="row text-center mb-4">
@@ -449,7 +444,6 @@
             </div>
         </section>
 
-        <!-- 사용 방법 섹션 -->
         <section style="padding: 80px 0; background: #f8f9fa;">
             <div class="container">
                 <div class="row text-center mb-5">
@@ -495,7 +489,6 @@
         </section>
     </div>
 
-    <!-- 기존 메인 애플리케이션 -->
     <div class="main-layout">
         <div id="left-banners" class="banner-container"></div>
         
@@ -561,8 +554,8 @@
                       <div class="rules-box">
                           <h6 class="mb-2 fw-bold">📢 링크 저장/삭제 규칙</h6>
                           <ul>
-                              <li>품앗이에 참여할 링크는 <strong>당일 17시 59분까지</strong> 등록/수정/삭제할 수 있습니다.</li>
-                              <li>급한 사정으로 품앗이가 어렵다면, 반드시 <strong>17시 59분까지 링크를 삭제</strong>해 주세요. <strong>18시 이후에는 삭제가 불가</strong>합니다.</li>
+                              <li>품앗이에 참여할 링크는 <strong>당일 19시 59분까지</strong> 등록/수정/삭제할 수 있습니다.</li>
+                              <li>급한 사정으로 품앗이가 어렵다면, 반드시 <strong>19시 59분까지 링크를 삭제</strong>해 주세요. <strong>20시 이후에는 삭제가 불가</strong>합니다.</li>
                               <li>품앗이 활동을 모두 마친 후, <strong>당일 23시 30분까지 '품앗이 완료 확인' 탭에서 완료 보고</strong>를 해야 패널티를 받지 않습니다.</li>
                           </ul>
                       </div>
@@ -630,7 +623,6 @@
         <div id="right-banners" class="banner-container"></div>
     </div>
 
-    <!-- 팝업 -->
     <div id="chatRoomPopup" class="custom-popup">
         <div class="popup-content">
             <div class="popup-icon">⚠️</div>
@@ -645,7 +637,6 @@
         </div>
     </div>
 
-    <!-- 기존 모달들 -->
     <div class="modal fade" id="linkModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="modalTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="alert alert-info small">네이버 <b>모바일 버전(m.blog.naver.com)</b> 링크만 가능합니다.<br>(PC버전, <b>클립(Clip)</b>, 단축URL, 타 블로그 불가)</div><p><strong>아이디:</strong> <span id="modalUserId"></span></p><div class="mb-3"><label class="form-label">링크 1 (필수)</label><input type="url" class="form-control" id="linkInput1" placeholder="https://m.blog.naver.com/..."></div><div class="mb-3"><label class="form-label">링크 2</label><input type="url" class="form-control" id="linkInput2" placeholder="https://m.blog.naver.com/..."></div><div class="mb-3"><label class="form-label">링크 3</label><input type="url" class="form-control" id="linkInput3" placeholder="https://m.blog.naver.com/..."></div><div id="linkModalAlert" class="alert mt-3 hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button><button type="button" class="btn btn-danger hidden" id="deleteLinksButton">삭제하기</button><button type="button" class="btn btn-primary" id="saveLinksButton">저장하기</button></div></div></div></div>
     <div class="modal fade" id="completionModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">품앗이 완료 확인</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>금일 모든 품앗이 완료 되었음을 보고 합니다. 좋아요, 댓글, 체류 완료 되었습니다.</p><p class="text-muted small">아래 확인버튼 누르시면 금일 품앗이는 모두 완료됩니다.</p><div id="completionModalAlert" class="alert mt-3 hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="confirmCompletionButton">확인</button></div></div></div></div>
     <div class="modal fade" id="adminPasswordModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">관리자 로그인</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="mb-3"><label for="adminPasswordInput" class="form-label">비밀번호</label><input type="password" class="form-control" id="adminPasswordInput" autocomplete="new-password"></div><div id="adminPasswordAlert" class="alert alert-danger hidden" role="alert"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button><button type="button" class="btn btn-primary" id="adminSubmitPasswordButton">진입</button></div></div></div></div>
@@ -756,16 +747,16 @@
             chatRoomPopup.classList.remove('show');
         }
         
-        // 시작하기 버튼들 이벤트
+        // 시작하기 버튼들 이벤트 (수정됨)
         startBtn.addEventListener('click', () => {
-            showPopup();
+            showView(authView); // 로그인 화면으로 바로 이동
         });
         
         startBtn2.addEventListener('click', () => {
-            showPopup();
+            showView(authView); // 로그인 화면으로 바로 이동
         });
         
-        // 팝업 확인 버튼 이벤트
+        // 팝업 확인 버튼 이벤트 (기존 로직은 유지)
         popupConfirmBtn.addEventListener('click', () => {
             hidePopup();
             showView(authView);
@@ -996,12 +987,14 @@
                 const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
                 const kstHours = nowKST.getHours();
 
-                if (kstHours >= 18) {
+                // --- [수정된 부분] ---
+                if (kstHours >= 20) { // 18시에서 20시로 변경
                     saveLinksButton.disabled = true;
-                    saveLinksButton.title = "오후 6시 이후에는 저장/수정이 불가합니다.";
+                    saveLinksButton.title = "오후 8시 이후에는 저장/수정이 불가합니다."; // 안내 문구 변경
                     deleteLinksButton.disabled = true;
-                    deleteLinksButton.title = "오후 6시 이후에는 삭제가 불가합니다.";
+                    deleteLinksButton.title = "오후 8시 이후에는 삭제가 불가합니다."; // 안내 문구 변경
                 } else {
+                // --- [여기까지 수정] ---
                     saveLinksButton.disabled = false;
                     saveLinksButton.title = "";
                     deleteLinksButton.disabled = false;
@@ -1034,9 +1027,11 @@
                 showAlert(linkModalAlert, error.message);
             } finally {
                 const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-                if (nowKST.getHours() < 18) {
+                // --- [수정된 부분] ---
+                if (nowKST.getHours() < 20) { // 18시에서 20시로 변경
                     saveLinksButton.disabled = false;
                 }
+                // --- [여기까지 수정] ---
             }
         });
 
@@ -1051,9 +1046,11 @@
                     showAlert(linkModalAlert, error.message);
                 } finally {
                     const nowKST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-                    if (nowKST.getHours() < 18) {
+                    // --- [수정된 부분] ---
+                    if (nowKST.getHours() < 20) { // 18시에서 20시로 변경
                         deleteLinksButton.disabled = false;
                     }
+                    // --- [여기까지 수정] ---
                 }
             }
         });
@@ -1190,8 +1187,22 @@
                 adminUserTable.innerHTML = '';
                 users.forEach(user => {
                     const tr = document.createElement('tr');
-                    const lockoutDate = user.LockoutEndDate ? new Date(user.LockoutEndDate).toISOString().split('T')[0] : '';
-                    const regDate = user.RegistrationDate ? new Date(user.RegistrationDate).toISOString().split('T')[0] : '';
+                    
+                    let regDate = '';
+                    if (user.RegistrationDate) {
+                        const d = new Date(user.RegistrationDate);
+                        if (!isNaN(d.getTime())) { // 날짜가 유효한지 확인
+                            regDate = d.toISOString().split('T')[0];
+                        }
+                    }
+
+                    let lockoutDate = '';
+                    if (user.LockoutEndDate) {
+                        const d = new Date(user.LockoutEndDate);
+                        if (!isNaN(d.getTime())) { // 날짜가 유효한지 확인
+                            lockoutDate = d.toISOString().split('T')[0];
+                        }
+                    }
                     
                     let statusKorean = '';
                     let statusClass = '';
@@ -1211,7 +1222,6 @@
                         statusKorean = user.Status;
                     }
 
-                    // 탈퇴된 사용자는 탈퇴 버튼을 비활성화
                     const isWithdrawn = user.Status === 'WITHDRAWN' || user.Status === 'PERMANENTLY_WITHDRAWN';
                     const withdrawButtons = isWithdrawn ? 
                         '' : 
@@ -1306,7 +1316,6 @@
                 adminEditModal.show();
             }
             
-            // 일반 탈퇴 처리
             if (e.target.classList.contains('admin-withdraw-btn')) {
                 const userId = e.target.dataset.userId;
                 if (confirm(`정말로 "${userId}" 회원을 탈퇴 처리하시겠습니까?\n\n- 일반탈퇴: 사용자 데이터를 완전히 삭제합니다.\n- 해당 사용자는 언제든지 다시 가입할 수 있습니다.\n- 삭제된 데이터는 복구할 수 없습니다.`)) {
@@ -1315,7 +1324,6 @@
                     console.log('탈퇴 처리 시작:', userId);
                     
                     try {
-                        // 사용자 데이터를 완전히 삭제
                         const deleteData = await apiCall('adminDeleteUser', { 
                             password: ADMIN_PASSWORD_FRONT, 
                             userId: userId,
@@ -1324,7 +1332,7 @@
                         console.log('탈퇴 처리 응답:', deleteData);
                         showAlert(adminAlert, `"${userId}" 회원이 완전히 삭제되었습니다. (재가입 가능)`, 'success');
                         setTimeout(() => {
-                            adminFetchUsers(); // 1초 후 새로고침
+                            adminFetchUsers();
                         }, 1000);
                     } catch (error) {
                         console.error('탈퇴 처리 오류:', error);
@@ -1336,18 +1344,15 @@
                 }
             }
             
-            // 영구 탈퇴 처리
             if (e.target.classList.contains('admin-permanent-withdraw-btn')) {
                 const userId = e.target.dataset.userId;
                 if (confirm(`⚠️ 경고: "${userId}" 회원을 영구탈퇴 처리하시겠습니까?\n\n- 영구탈퇴: 사용자 데이터를 완전히 삭제하고 해당 아이디를 블랙리스트에 등록합니다.\n- 해당 아이디로는 절대 재가입할 수 없습니다.\n- 이 작업은 되돌릴 수 없습니다!\n\n정말로 진행하시겠습니까?`)) {
-                    // 추가 확인
                     if (confirm(`마지막 확인입니다.\n\n"${userId}" 회원을 정말로 영구탈퇴 처리하시겠습니까?\n\n- 사용자 데이터 완전 삭제\n- 아이디 블랙리스트 등록\n- 절대 되돌릴 수 없습니다!`)) {
                         e.target.disabled = true;
                         e.target.textContent = '처리중...';
                         console.log('영구탈퇴 처리 시작:', userId);
                         
                         try {
-                            // 사용자 데이터를 완전히 삭제하고 블랙리스트에 추가
                             const deleteData = await apiCall('adminDeleteUser', { 
                                 password: ADMIN_PASSWORD_FRONT, 
                                 userId: userId,
@@ -1356,7 +1361,7 @@
                             console.log('영구탈퇴 처리 응답:', deleteData);
                             showAlert(adminAlert, `"${userId}" 회원이 완전히 삭제되고 블랙리스트에 등록되었습니다. (재가입 불가)`, 'warning');
                             setTimeout(() => {
-                                adminFetchUsers(); // 1초 후 새로고침
+                                adminFetchUsers();
                             }, 1000);
                         } catch (error) {
                             console.error('영구탈퇴 처리 오류:', error);
